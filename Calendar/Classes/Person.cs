@@ -35,6 +35,7 @@ namespace Calendar.Classes
 			if (Attendance.ContainsKey(eventId))
 			{
 				Attendance.Remove(eventId);
+				return;
 			}
 			Console.WriteLine("There is no event to be removed by the chosen key!\n");
 		}
