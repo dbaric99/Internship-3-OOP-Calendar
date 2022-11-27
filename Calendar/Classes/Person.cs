@@ -8,12 +8,6 @@ namespace Calendar.Classes
 		public string Email { get; }
 		public Dictionary<Guid, bool> Attendance { get; private set; } = new Dictionary<Guid, bool>();
 
-		public Person(string surname, string email)
-		{
-			Surname = surname;
-			Email = email;
-		}
-
 		public Person(string name, string surname, string email)
 		{
 			Name = name;

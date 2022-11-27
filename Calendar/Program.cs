@@ -9,19 +9,18 @@ namespace Calendar
         {
             var people = new List<Person>()
             {
-                new Person("Trisha", "Bunker", "trisha.bunker@gmail.com"), //0
-                new Person("Sabrina", "Gibb", "sabrina.gibb@gmail.com"), //1
-                new Person("Adrian", "Faulkner", "adrian.faulkner@gmail.com"), //2
-                new Person("Meredith", "Sherburne", "meredith.sherburne@gmail.com"), //3
-                new Person("Edith", "Hermanson", "edith.hermanson@gmail.com"), //4
-                new Person("Harmon", "Dukes", "harmon.dukes@gmail.com"), //5
-                new Person("Palmer", "Garland", "palmer.garland@gmail.com"), //6
-                new Person("Davina", "Carver", "davina.carver@gmail.com"), //7
-                new Person("Levi", "Sharp", "levi.sharp@gmail.com"), //8
-                new Person("Ingram", "Morin", "ingram.morin@gmail.com"), //9
+                new Person("Trisha", "Bunker", "trisha.bunker@gmail.com"),
+                new Person("Sabrina", "Gibb", "sabrina.gibb@gmail.com"),
+                new Person("Adrian", "Faulkner", "adrian.faulkner@gmail.com"),
+                new Person("Meredith", "Sherburne", "meredith.sherburne@gmail.com"),
+                new Person("Edith", "Hermanson", "edith.hermanson@gmail.com"),
+                new Person("Harmon", "Dukes", "harmon.dukes@gmail.com"),
+                new Person("Palmer", "Garland", "palmer.garland@gmail.com"),
+                new Person("Davina", "Carver", "davina.carver@gmail.com"),
+                new Person("Levi", "Sharp", "levi.sharp@gmail.com"),
+                new Person("Ingram", "Morin", "ingram.morin@gmail.com"),
             };
 
-            //year month day hour minute second
             var events = new List<Event>()
             {
                 new Event("Lecture 1", "FESB - A101",new DateTime(2021,10,05,13,15,00), new DateTime(2021,10,05,16,00,00)),
@@ -50,7 +49,7 @@ namespace Calendar
             var menuChoice = 0;
             do
             {
-                menuChoice = MainMenu();
+                menuChoice = GetMainMenuOptionFromUser();
 
                 switch (menuChoice)
                 {
@@ -90,7 +89,7 @@ namespace Calendar
 
             Console.ReadKey();
 
-            int MainMenu()
+            int GetMainMenuOptionFromUser()
             {
                 var isValid = false;
                 var choice = 0;
@@ -160,8 +159,8 @@ namespace Calendar
 
                 targetEvent = events.Find(e => e.Id == eventId);
 
-                Console.Write("\nInsert emails of people you want note as absent with space in between: ");
-                string[] emails = Console.ReadLine().Split(" ");
+                Console.Write("\nInsert emails of people you want note as absent with commas in between: ");
+                string[] emails = Console.ReadLine().Split(",");
 
                 foreach (var email in emails)
                 {
@@ -324,8 +323,8 @@ namespace Calendar
                     return;
                 }
 
-                Console.Write("\nInsert emails of people you want to remove from an event: ");
-                string[] emails = Console.ReadLine().Split(" ");
+                Console.Write("\nInsert emails of people you want to remove from an event with commas in between: ");
+                string[] emails = Console.ReadLine().Split(",");
 
                 targetEvent.RemoveParticipant(emails);
 
@@ -369,7 +368,86 @@ namespace Calendar
 
             List<Event> CreateNewEvent(List<Event> events, List<Person> people)
             {
+                DateTime startDate, endDate;
+                List<string> participants = new List<string>();
 
+                Console.Write("\nInput event name: ");
+                var eventName = Console.ReadLine();
+
+                Console.Write("\nInput event location: ");
+                var eventLocation = Console.ReadLine();
+
+                Console.Write("\nInput start date in format yyyy-mm-dd hh:mm : ");
+                var startDateString = Console.ReadLine();
+
+                bool startDateParseSuccess = DateTime.TryParse(startDateString, out startDate);
+
+                Console.Write("\nInput end date in format yyyy-mm-dd hh:mm : ");
+                var endDateString = Console.ReadLine();
+
+                var endDateParseSuccess = DateTime.TryParse(endDateString, out endDate);
+
+                if(!(startDateParseSuccess && endDateParseSuccess))
+                {
+                    Console.WriteLine("\nInvalid date input!");
+                    return events;
+                }
+                if(DateTime.Now>startDate || endDate < startDate)
+                {
+                    Console.WriteLine("\nStart date must be in the future and end date has to be after the start date!");
+                    return events;
+                }
+
+                Console.Write("\nEnter emails of the participants divided by commas: ");
+                var emails = Console.ReadLine().Trim().Split(",");
+
+                foreach (var email in emails)
+                {
+                    var overlap = CheckForOverlap(events, email, startDate, endDate);
+                    if (!overlap)
+                    {
+                        if(GetPersonByEmail(people,email) != null)
+                            Console.WriteLine($"\nPerson with email {email} does not exist!");
+                        else
+                        {
+                            participants.Add(email);
+                        }
+                    }
+                }
+
+                var newEvent = new Event(eventName, eventLocation, startDate, endDate);
+                events.Add(newEvent);
+
+                foreach (var participantEmail in participants)
+                {
+                    var p = GetPersonByEmail(people, participantEmail);
+                    p.SetAttendance(newEvent.Id, true);
+                }
+
+                return events;
+            }
+
+            //<<<---------- HELPER FUNCTIONS ---------->>>
+
+            bool CheckForOverlap(List<Event> events, string email, DateTime startDate, DateTime endDate)
+            {
+                foreach (var ev in events)
+                {
+                    if (ev.Participants.Contains(email))
+                    {
+                        if((ev.StartDate >= startDate && ev.StartDate <= endDate) || (ev.EndDate >= startDate && ev.EndDate <= endDate))
+                        {
+                            Console.WriteLine($"\nThere is overlap for person {email}, they won't be added to this event!");
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+
+            Person? GetPersonByEmail(List<Person> people, string email)
+            {
+                return people.Find(p => p.Email == email);
             }
         }
     }
