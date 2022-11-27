@@ -47,13 +47,6 @@ namespace Calendar.Classes
 				}
 			}
 		}
-
-		public void PrintEvent()
-		{
-            Console.WriteLine($"Id: {Id}\n"
-                            + $"Event: {EventName} - Location: {Location} - Ends in: {EndDate - DateTime.Now}\n"
-                            + $"Participants: {(Participants.Count != 0 ? string.Join(", ",Participants) : "None")}\n");
-        }
 	}
 }
 

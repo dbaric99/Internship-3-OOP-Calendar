@@ -66,10 +66,12 @@ namespace Calendar
                         }
                     case 3:
                         {
+                            PastEvents(events, people);
                             break;
                         }
                     case 4:
                         {
+                            events = CreateNewEvent(events, people);
                             break;
                         }
                     case 0:
@@ -334,6 +336,40 @@ namespace Calendar
                         person.RemoveAttendance(targetedId);
                     }
                 }
+            }
+
+            void PastEvents(List<Event> events, List<Person> people)
+            {
+                Console.WriteLine("\n<<<---------- FINISHED EVENTS ---------->>>\n");
+                int count = 0;
+                foreach (var ev in events)
+                {
+                    if(ev.EndDate < DateTime.Now)
+                    {
+                        count++;
+                        Console.WriteLine($"Id: {ev.Id}\n"
+                           + $"Event: {ev.EventName} - Location: {ev.Location} - Ended before: {DateTime.Now.Subtract(ev.EndDate).Days} days - Duration: {ev.EndDate.Subtract(ev.StartDate).Hours} hours");
+                        List<string> attendingPeople = new List<string>();
+                        List<string> nonAttendingPeople = new List<string>();
+                        foreach (var person in people)
+                        {
+                            if (person.Attendance.ContainsKey(ev.Id))
+                            {
+                                if (person.Attendance[ev.Id])
+                                    attendingPeople.Add(person.Email);
+                                else
+                                    nonAttendingPeople.Add(person.Email);
+                            }
+                        }
+                        Console.WriteLine($"Attending people: {(attendingPeople.Count != 0 ? string.Join(", ", attendingPeople) : "None")}\n"
+                            + $"Non-attending people: {(nonAttendingPeople.Count != 0 ? string.Join(", ",nonAttendingPeople) : "None")}\n\n");
+                    }
+                }
+            }
+
+            List<Event> CreateNewEvent(List<Event> events, List<Person> people)
+            {
+
             }
         }
     }
