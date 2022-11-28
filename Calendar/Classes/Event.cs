@@ -24,9 +24,6 @@ namespace Calendar.Classes
 			EndDate = endDate;
         }
 
-		/*
-		 * Add participants unless they are already in the list, then just ignore 
-		*/
 		public void AddParticipant(string[] participants)
 		{
 			Participants.AddRange(participants.Where(p2 =>

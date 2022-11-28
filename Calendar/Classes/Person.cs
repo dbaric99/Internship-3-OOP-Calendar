@@ -21,7 +21,7 @@ namespace Calendar.Classes
 			{
 				Attendance[eventId] = isAttending;
 			}
-			Attendance.Add(eventId, isAttending);
+			Attendance[eventId] = isAttending;
 		}
 
 		public void RemoveAttendance(Guid eventId)

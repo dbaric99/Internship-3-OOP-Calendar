@@ -7,44 +7,9 @@ namespace Calendar
     {
         static void Main(string[] args)
         {
-            var people = new List<Person>()
-            {
-                new Person("Trisha", "Bunker", "trisha.bunker@gmail.com"),
-                new Person("Sabrina", "Gibb", "sabrina.gibb@gmail.com"),
-                new Person("Adrian", "Faulkner", "adrian.faulkner@gmail.com"),
-                new Person("Meredith", "Sherburne", "meredith.sherburne@gmail.com"),
-                new Person("Edith", "Hermanson", "edith.hermanson@gmail.com"),
-                new Person("Harmon", "Dukes", "harmon.dukes@gmail.com"),
-                new Person("Palmer", "Garland", "palmer.garland@gmail.com"),
-                new Person("Davina", "Carver", "davina.carver@gmail.com"),
-                new Person("Levi", "Sharp", "levi.sharp@gmail.com"),
-                new Person("Ingram", "Morin", "ingram.morin@gmail.com"),
-            };
-
-            var events = new List<Event>()
-            {
-                new Event("Lecture 1", "FESB - A101",new DateTime(2021,10,05,13,15,00), new DateTime(2021,10,05,16,00,00)),
-                new Event("Lecture 2", "FESB - A320", new DateTime(2022,01,21,16,15,00), new DateTime(2022,01,21,19,00,00)),
-                new Event("Lecture 3", "FESB - C501", new DateTime(2022,05,25,17,15,00), new DateTime(2022,05,25,20,00,00)),
-                new Event("Lecture 4", "FESB - B525", new DateTime(2022,11,26,9,00,00), new DateTime(2022,11,28,10,30,00)),
-                new Event("Lecture 5", "FESB - B320", new DateTime(2023,03,16,14,15,00), new DateTime(2023,03,16,16,00,00)),
-            };
-
-            events[0].AddParticipant(new string[2] { "palmer.garland@gmail.com", "ingram.morin@gmail.com" });
-            events[1].AddParticipant(new string[1] { "trisha.bunker@gmail.com" });
-            events[2].AddParticipant(new string[3] { "harmon.dukes@gmail.com", "levi.sharp@gmail.com", "meredith.sherburne@gmail.com" });
-            events[4].AddParticipant(new string[4] { "palmer.garland@gmail.com", "davina.carver@gmail.com", "levi.sharp@gmail.com", "adrian.faulkner@gmail.com" });
-
-            people[6].SetAttendance(events[0].Id, true);
-            people[9].SetAttendance(events[0].Id, true);
-            people[0].SetAttendance(events[1].Id, true);
-            people[5].SetAttendance(events[2].Id, true);
-            people[8].SetAttendance(events[2].Id, true);
-            people[3].SetAttendance(events[2].Id, true);
-            people[6].SetAttendance(events[4].Id, true);
-            people[7].SetAttendance(events[4].Id, true);
-            people[8].SetAttendance(events[4].Id, true);
-            people[2].SetAttendance(events[4].Id, true);
+            var people = InitializePeople();
+            var events = InitializeDefaultEvents();
+            ConnectPeopleWithDefaultEvents(events, people);
 
             var menuChoice = 0;
             do
@@ -89,6 +54,57 @@ namespace Calendar
 
             Console.ReadKey();
 
+            List<Event> InitializeDefaultEvents()
+            {
+                return new List<Event>()
+                {
+                    new Event("Lecture 1", "FESB - A101",new DateTime(2021,10,05,13,15,00), new DateTime(2021,10,05,16,00,00)),
+                    new Event("Lecture 2", "FESB - A320", new DateTime(2022,01,21,16,15,00), new DateTime(2022,01,21,19,00,00)),
+                    new Event("Lecture 3", "FESB - C501", new DateTime(2022,05,25,17,15,00), new DateTime(2022,05,25,20,00,00)),
+                    new Event("Lecture 4", "FESB - B525", new DateTime(2022,11,26,9,00,00), new DateTime(2022,11,28,10,30,00)),
+                    new Event("Lecture 5", "FESB - B320", new DateTime(2023,03,16,14,15,00), new DateTime(2023,03,16,16,00,00)),
+                };
+            }
+
+            List<Person> InitializePeople()
+            {
+                return new List<Person>()
+                {
+                    new Person("Trisha", "Bunker", "trisha.bunker@gmail.com"),
+                    new Person("Sabrina", "Gibb", "sabrina.gibb@gmail.com"),
+                    new Person("Adrian", "Faulkner", "adrian.faulkner@gmail.com"),
+                    new Person("Meredith", "Sherburne", "meredith.sherburne@gmail.com"),
+                    new Person("Edith", "Hermanson", "edith.hermanson@gmail.com"),
+                    new Person("Harmon", "Dukes", "harmon.dukes@gmail.com"),
+                    new Person("Palmer", "Garland", "palmer.garland@gmail.com"),
+                    new Person("Davina", "Carver", "davina.carver@gmail.com"),
+                    new Person("Levi", "Sharp", "levi.sharp@gmail.com"),
+                    new Person("Ingram", "Morin", "ingram.morin@gmail.com"),
+                };
+            }
+
+            void ConnectPeopleWithDefaultEvents(List<Event> events, List<Person> people)
+            {
+                events[0].AddParticipant(new string[2] { people[6].Email, people[9].Email });
+                events[1].AddParticipant(new string[1] { people[0].Email });
+                events[2].AddParticipant(new string[3] { people[5].Email, people[8].Email, people[3].Email });
+                events[4].AddParticipant(new string[4] { people[6].Email, people[7].Email, people[8].Email, people[2].Email });
+                events[3].AddParticipant(new string[2] { people[3].Email, people[4].Email });
+
+                people[6].SetAttendance(events[0].Id, false);
+                people[9].SetAttendance(events[0].Id, true);
+                people[0].SetAttendance(events[1].Id, true);
+                people[5].SetAttendance(events[2].Id, true);
+                people[8].SetAttendance(events[2].Id, true);
+                people[3].SetAttendance(events[2].Id, true);
+                people[6].SetAttendance(events[4].Id, true);
+                people[7].SetAttendance(events[4].Id, true);
+                people[8].SetAttendance(events[4].Id, true);
+                people[2].SetAttendance(events[4].Id, true);
+                people[3].SetAttendance(events[3].Id, true);
+                people[4].SetAttendance(events[3].Id, true);
+            }
+
             int GetMainMenuOptionFromUser()
             {
                 var isValid = false;
@@ -114,67 +130,54 @@ namespace Calendar
 
             void GetAllActiveEvents(List<Event> events)
             {
+                Console.Clear();
                 if(events.Count == 0)
                 {
                     Console.WriteLine("\nThere are no events!\n");
                     return;
                 }
                 Console.WriteLine("\n<<<---------- ACTIVE EVENTS ---------->>>\n");
+                int count = 0;
                 foreach (var ev in events)
                 {
                     if(DateTime.Now >= ev.StartDate && DateTime.Now < ev.EndDate)
                     {
+                        count++;
                         Console.WriteLine($"Id: {ev.Id}\n"
-                            + $"Event: {ev.EventName} - Location: {ev.Location} - Ends in: {ev.EndDate - DateTime.Now}\n"
+                            + $"Event: {ev.EventName} - Location: {ev.Location} - Ends in: {Math.Round((ev.EndDate - DateTime.Now).TotalHours,1)} hours\n"
                             + $"Participants: {(ev.Participants.Count != 0 ? string.Join(", ", ev.Participants) : "None")}\n");
                     }
                 }
+                if(count == 0)
+                    Console.WriteLine("No active events!\n");
             }
 
             void ActiveEventsSubmenu(List<Event> events, List<Person> people)
             {
-                Guid eventId;
-                Event targetEvent;
+                Console.Clear();
 
                 GetAllActiveEvents(events);
 
                 Console.Write("\nNote someone's absence(y/n): ");
-                string menuChoice = Console.ReadLine().ToLower();
+                string menuChoice = Console.ReadLine();
 
                 if (menuChoice != "y") return;
 
-                Console.Write("\nInsert event id: ");
-                bool success = Guid.TryParse(Console.ReadLine(), out eventId);
+                var targetEvent = FindEventFromUserInput(events);
 
-                if (!success)
-                {
-                    Console.WriteLine("Invalid input for event id!\n");
-                    return;
-                }
-                else if(!events.Any(e => e.Id == eventId))
-                {
-                    Console.WriteLine("There is no event with certain id!\n");
-                    return;
-                }
-
-                targetEvent = events.Find(e => e.Id == eventId);
+                if (targetEvent == null) return;
 
                 Console.Write("\nInsert emails of people you want note as absent with commas in between: ");
-                string[] emails = Console.ReadLine().Split(",");
+                string[] emails = Console.ReadLine().Split(", ");
 
                 foreach (var email in emails)
                 {
-                    if (people.Any(p => p.Email == email))
-                    {
-                        Person targetPerson = people.Find(p => p.Email == email);
+                    var targetPerson = GetPersonByEmail(people, email);
+                    if (targetPerson != null)
                         targetPerson.SetAttendance(targetEvent.Id, false);
-                    }
-                    else
-                    {
-                        Console.WriteLine($"There is no person with the following email: {email}!\n");
-                    }
                 }
                 targetEvent.RemoveParticipant(emails);
+                Console.WriteLine("\nSuccess!\n");
             }
 
             void GetAllUpcomingEvents(List<Event> events)
@@ -192,17 +195,15 @@ namespace Calendar
                     {
                         count++;
                         Console.WriteLine($"Id: {ev.Id}\n"
-                            + $"Event: {ev.EventName} - Location: {ev.Location} - Starts in: {ev.StartDate.Subtract(DateTime.Now).Hours}\n"
+                            + $"Event: {ev.EventName} - Location: {ev.Location} - Starts in: {Math.Round((ev.StartDate - DateTime.Now).TotalDays,1)} days - Duration: {Math.Round((ev.EndDate - ev.StartDate).TotalHours,1)} hours\n"
                             + $"Participants: {(ev.Participants.Count != 0 ? string.Join(", ", ev.Participants) : "None")}\n");
                     }
                 }
                 if(count == 0)
-                {
                     Console.WriteLine("No upcoming events!\n");
-                }
             }
 
-            int UpcomingEventsMenu()
+            int GetUpcomingEventsMenuChoiceFromUser()
             {
                 int choice = 0;
                 bool isValid = false;
@@ -223,19 +224,15 @@ namespace Calendar
 
             List<Event>? UpcomingEventsSubmenu(List<Event> events, List<Person> people)
             {
-                if(events == null)
-                {
-                    Console.WriteLine("\nThere are no upcoming events!");
-                    return events;
-                }
-
+                Console.Clear();
+                
                 GetAllUpcomingEvents(events);
 
                 var upcomingEventsChoice = 0;
 
                 do
                 {
-                    upcomingEventsChoice = UpcomingEventsMenu();
+                    upcomingEventsChoice = GetUpcomingEventsMenuChoiceFromUser();
 
                     switch (upcomingEventsChoice)
                     {
@@ -267,34 +264,21 @@ namespace Calendar
 
             List<Event> DeleteEvent(List<Event> events, List<Person> people)
             {
-                Guid targetedId;
+                var eventToRemove = FindEventFromUserInput(events);
 
-                Console.Write("\nInput id of event you want to delete: ");
-                var success = Guid.TryParse(Console.ReadLine(), out targetedId);
+                if (eventToRemove == null) return events;
 
-                if (!success)
+                if (eventToRemove.StartDate < DateTime.Now)
                 {
-                    Console.WriteLine("Invalid input for event id!\n");
+                    Console.WriteLine("\nSelected event is not an upcoming event!");
+                    return events;
                 }
-                else
-                {                  
-                    var eventToRemove = events.Find(ev => ev.Id == targetedId);
-                    if(eventToRemove == null)
-                    {
-                        Console.WriteLine("\nNo event with matching id found!");
-                        return events;
-                    }
-                    if(eventToRemove.StartDate < DateTime.Now)
-                    {
-                        Console.WriteLine("\nSelected event is not an upcoming event!");
-                        return events;
-                    }
-                    events.Remove(eventToRemove);
-                    foreach (var person in people)
-                    {
-                        if(person.Attendance.ContainsKey(targetedId))
-                            person.RemoveAttendance(targetedId);
-                    }
+                events.Remove(eventToRemove);
+                Console.WriteLine("\nEvent successfully deleted!\n");
+                foreach (var person in people)
+                {
+                    if (person.Attendance.ContainsKey(eventToRemove.Id))
+                        person.RemoveAttendance(eventToRemove.Id);
                 }
 
                 return events;
@@ -302,54 +286,50 @@ namespace Calendar
 
             void RemoveAttendingPeopleFromEvent(List<Event> events, List<Person> people)
             {
-                Guid targetedId;
+                var targetEvent = FindEventFromUserInput(events);
 
-                Console.Write("\nInput id of the event from which you want to remove attending people: ");
-                var success = Guid.TryParse(Console.ReadLine(), out targetedId);
+                if (targetEvent == null) return;
 
-                if (!success)
-                {
-                    Console.WriteLine("Invalid input for event id!\n");
-                }
-                var targetEvent = events.Find(ev => ev.Id == targetedId);
-                if(targetEvent == null)
-                {
-                    Console.WriteLine("\nNo event by that id!");
-                    return;
-                }
-                if (!(targetEvent.StartDate < DateTime.Now))
+                if (targetEvent.StartDate < DateTime.Now)
                 {
                     Console.WriteLine("\nSelected event is not an upcoming event!");
                     return;
                 }
 
                 Console.Write("\nInsert emails of people you want to remove from an event with commas in between: ");
-                string[] emails = Console.ReadLine().Split(",");
+                string[] emails = Console.ReadLine().Split(", ");
 
                 targetEvent.RemoveParticipant(emails);
+                Console.WriteLine("\nSuccess!\n");
 
                 foreach (var person in people)
                 {
-                    if (emails.Contains(person.Email) && person.Attendance.ContainsKey(targetedId))
-                    {
-                        person.RemoveAttendance(targetedId);
-                    }
+                    if (emails.Contains(person.Email) && person.Attendance.ContainsKey(targetEvent.Id))
+                        person.RemoveAttendance(targetEvent.Id);
                 }
             }
 
             void PastEvents(List<Event> events, List<Person> people)
             {
-                Console.WriteLine("\n<<<---------- FINISHED EVENTS ---------->>>\n");
+                List<string> attendingPeople, nonAttendingPeople;
+
+                if (events.Count == 0)
+                {
+                    Console.WriteLine("\nThere are no events!\n");
+                    return;
+                }
+
+                Console.WriteLine("\n<<<---------- PAST EVENTS ---------->>>\n");
                 int count = 0;
                 foreach (var ev in events)
                 {
                     if(ev.EndDate < DateTime.Now)
                     {
                         count++;
+                        attendingPeople = new List<string>();
+                        nonAttendingPeople = new List<string>();
                         Console.WriteLine($"Id: {ev.Id}\n"
-                           + $"Event: {ev.EventName} - Location: {ev.Location} - Ended before: {DateTime.Now.Subtract(ev.EndDate).Days} days - Duration: {ev.EndDate.Subtract(ev.StartDate).Hours} hours");
-                        List<string> attendingPeople = new List<string>();
-                        List<string> nonAttendingPeople = new List<string>();
+                           + $"Event: {ev.EventName} - Location: {ev.Location} - Ended before: {Math.Round((DateTime.Now - ev.EndDate).TotalDays,1)} days - Duration: {Math.Round((ev.EndDate - ev.StartDate).TotalHours,1)} hours");
                         foreach (var person in people)
                         {
                             if (person.Attendance.ContainsKey(ev.Id))
@@ -364,10 +344,15 @@ namespace Calendar
                             + $"Non-attending people: {(nonAttendingPeople.Count != 0 ? string.Join(", ",nonAttendingPeople) : "None")}\n\n");
                     }
                 }
+                if (count == 0)
+                    Console.WriteLine("\nThere are no past events!\n");
             }
 
             List<Event> CreateNewEvent(List<Event> events, List<Person> people)
             {
+                Console.Clear();
+                Console.WriteLine("<<<---------- CREATE EVENT ---------->>>");
+
                 DateTime startDate, endDate;
                 List<string> participants = new List<string>();
 
@@ -399,14 +384,14 @@ namespace Calendar
                 }
 
                 Console.Write("\nEnter emails of the participants divided by commas: ");
-                var emails = Console.ReadLine().Trim().Split(",");
+                var emails = Console.ReadLine().Trim().Split(", ");
 
                 foreach (var email in emails)
                 {
                     var overlap = CheckForOverlap(events, email, startDate, endDate);
                     if (!overlap)
                     {
-                        if(GetPersonByEmail(people,email) != null)
+                        if(GetPersonByEmail(people,email) == null)
                             Console.WriteLine($"\nPerson with email {email} does not exist!");
                         else
                         {
@@ -416,6 +401,8 @@ namespace Calendar
                 }
 
                 var newEvent = new Event(eventName, eventLocation, startDate, endDate);
+                newEvent.AddParticipant(participants.ToArray());
+
                 events.Add(newEvent);
 
                 foreach (var participantEmail in participants)
@@ -448,6 +435,30 @@ namespace Calendar
             Person? GetPersonByEmail(List<Person> people, string email)
             {
                 return people.Find(p => p.Email == email);
+            }
+
+            Event? FindEventFromUserInput(List<Event> events)
+            {
+                Guid eventId;
+
+                Console.Write("\nInsert event id: ");
+                bool success = Guid.TryParse(Console.ReadLine(), out eventId);
+
+                if (!success)
+                {
+                    Console.WriteLine("\nInvalid input for event id!");
+                    return null;
+                }
+
+                var targetedEvent = events.Find(ev => ev.Id == eventId);
+
+                if (targetedEvent == null)
+                {
+                    Console.WriteLine("\nThere is no event with certain id!");
+                    return null;
+                }
+
+                return targetedEvent;
             }
         }
     }
