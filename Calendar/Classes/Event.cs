@@ -1,5 +1,4 @@
-﻿using System;
-namespace Calendar.Classes
+﻿namespace Calendar.Classes
 {
 	public class Event
 	{

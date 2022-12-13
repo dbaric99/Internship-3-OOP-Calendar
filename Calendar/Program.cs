@@ -1,5 +1,4 @@
-﻿using System;
-using Calendar.Classes;
+﻿using Calendar.Classes;
 
 namespace Calendar
 {
@@ -128,13 +127,13 @@ namespace Calendar
                 return choice;
             }
 
-            void GetAllActiveEvents(List<Event> events)
+            bool GetAllActiveEvents(List<Event> events)
             {
                 Console.Clear();
                 if(events.Count == 0)
                 {
                     Console.WriteLine("\nThere are no events!\n");
-                    return;
+                    return false;
                 }
                 Console.WriteLine("\n<<<---------- ACTIVE EVENTS ---------->>>\n");
                 int count = 0;
@@ -148,15 +147,18 @@ namespace Calendar
                             + $"Participants: {(ev.Participants.Count != 0 ? string.Join(", ", ev.Participants) : "None")}\n");
                     }
                 }
-                if(count == 0)
+                if (count == 0)
                     Console.WriteLine("No active events!\n");
+
+                return count != 0;
             }
 
             void ActiveEventsSubmenu(List<Event> events, List<Person> people)
             {
                 Console.Clear();
 
-                GetAllActiveEvents(events);
+                if (!GetAllActiveEvents(events))
+                    return;
 
                 Console.Write("\nNote someone's absence(y/n): ");
                 string menuChoice = Console.ReadLine();
