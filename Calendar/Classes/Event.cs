@@ -3,21 +3,16 @@
 	public class Event
 	{
 		public Guid Id { get; }
-		public string EventName { get; set; }
+		public string Name { get; set; }
 		public string Location { get; set; }
 		public DateTime StartDate { get; set; }
 		public DateTime EndDate { get; set; }
 		public List<string> Participants { get; private set; } = new List<string>();
 
-		public Event()
-		{
-			Id = Guid.NewGuid();
-		}
-
 		public Event(string eventName, string location, DateTime startDate, DateTime endDate)
 		{
 			Id = Guid.NewGuid();
-			EventName = eventName;
+			Name = eventName;
 			Location = location;
 			StartDate = startDate;
 			EndDate = endDate;
@@ -34,9 +29,7 @@
 			foreach (var p in participants)
 			{
 				if (Participants.Contains(p))
-				{
 					Participants.Remove(p);
-				}
 				else
 				{
 					Console.WriteLine($"Person with email {p} does not exist in the participants list!\n");

@@ -143,7 +143,7 @@ namespace Calendar
                     {
                         count++;
                         Console.WriteLine($"Id: {ev.Id}\n"
-                            + $"Event: {ev.EventName} - Location: {ev.Location} - Ends in: {Math.Round((ev.EndDate - DateTime.Now).TotalHours,1)} hours\n"
+                            + $"Event: {ev.Name} - Location: {ev.Location} - Ends in: {Math.Round((ev.EndDate - DateTime.Now).TotalHours,1)} hours\n"
                             + $"Participants: {(ev.Participants.Count != 0 ? string.Join(", ", ev.Participants) : "None")}\n");
                     }
                 }
@@ -197,7 +197,7 @@ namespace Calendar
                     {
                         count++;
                         Console.WriteLine($"Id: {ev.Id}\n"
-                            + $"Event: {ev.EventName} - Location: {ev.Location} - Starts in: {Math.Round((ev.StartDate - DateTime.Now).TotalDays,1)} days - Duration: {Math.Round((ev.EndDate - ev.StartDate).TotalHours,1)} hours\n"
+                            + $"Event: {ev.Name} - Location: {ev.Location} - Starts in: {Math.Round((ev.StartDate - DateTime.Now).TotalDays,1)} days - Duration: {Math.Round((ev.EndDate - ev.StartDate).TotalHours,1)} hours\n"
                             + $"Participants: {(ev.Participants.Count != 0 ? string.Join(", ", ev.Participants) : "None")}\n");
                     }
                 }
@@ -331,7 +331,7 @@ namespace Calendar
                         attendingPeople = new List<string>();
                         nonAttendingPeople = new List<string>();
                         Console.WriteLine($"Id: {ev.Id}\n"
-                           + $"Event: {ev.EventName} - Location: {ev.Location} - Ended before: {Math.Round((DateTime.Now - ev.EndDate).TotalDays,1)} days - Duration: {Math.Round((ev.EndDate - ev.StartDate).TotalHours,1)} hours");
+                           + $"Event: {ev.Name} - Location: {ev.Location} - Ended before: {Math.Round((DateTime.Now - ev.EndDate).TotalDays,1)} days - Duration: {Math.Round((ev.EndDate - ev.StartDate).TotalHours,1)} hours");
                         foreach (var person in people)
                         {
                             if (person.Attendance.ContainsKey(ev.Id))
